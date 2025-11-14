@@ -17,9 +17,18 @@
 <body>
 	<div id="app">
 		<div>
-            <div>학번 : <input v-model="info.stuNo"></div>
-            <div>이름 : <input v-model="info.stuName"></div>
-            <button @click="fnLogin">로그인</button>
+            <div>
+                아이디 : <input v-model="userId">
+            </div>
+            <div>
+                비밀번호 : <input v-model="pwd">
+            </div>
+            <div>
+                이름 : <input v-model="userName">
+            </div>
+            <div>
+                <button @click="fnJoin">회원가입</button>
+            </div>
         </div>
 	</div>
 </body>
@@ -28,28 +37,30 @@
     const app = Vue.createApp({
         data() {
             return {
-                info : {
-                    stuNo : "",
-                    stuName : ""
-                }
+                list : [],
+                userId : "",
+                pwd : "",
+                userName : ""
             };
         },
         methods: {
-            fnLogin(){
+            fnJoin(){
                 let self = this;
-				fetch("http://localhost:3000/login", {
+                let param = {
+                    userId : self.userId,
+                    pwd : self.pwd,
+                    userName : self.userName
+                };
+				fetch("http://localhost:3000/user/join", {
                     method : "POST",
                     headers : {
                         "Content-type" : "application/json"
                     },
-                    body : JSON.stringify(self.info)
+                    body : JSON.stringify(param)
                 })
                     .then( res => res.json() )
                     .then( data => {
-                        alert(data.msg);
-                        if (data.result == "success") {                            
-                            location.href="student-list.html";
-                        }
+                        alert("가입되었습니다");
                     } )
             }
         },
